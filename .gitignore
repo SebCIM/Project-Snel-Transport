@@ -4,3 +4,8 @@
 
 # NetBeans specific #
 nb-configuration.xml
+.netbeans_automatic_build
+
+# Maven
+target/
+
