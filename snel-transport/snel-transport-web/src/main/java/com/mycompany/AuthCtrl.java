@@ -7,14 +7,12 @@ package com.mycompany;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Application;
 
