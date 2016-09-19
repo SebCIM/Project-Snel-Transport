@@ -3,33 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entities;
+package model;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
- * @author yomac_000
+ * @author Z.Huraibi
  */
 @Entity
+@Table(name="\"User\"")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String username;
+    private String name;
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -62,7 +64,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.User[ id=" + id + " ]";
+        return "model.User[ id=" + id + " ]";
     }
-
+    
 }
