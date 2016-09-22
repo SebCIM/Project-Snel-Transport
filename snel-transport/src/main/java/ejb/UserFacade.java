@@ -17,7 +17,7 @@ import model.User;
 @Stateless
 public class UserFacade extends AbstractFacade<User> {
 
-    @PersistenceContext(unitName = "com.mycompany_snel-transport_war_1.0-SNAPSHOTPU")
+    @PersistenceContext(unitName = "snel-transport")
     private EntityManager em;
 
     @Override
