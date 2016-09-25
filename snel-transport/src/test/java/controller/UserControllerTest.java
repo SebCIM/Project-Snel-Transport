@@ -5,8 +5,11 @@
  */
 package controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import ejb.Environment;
+import ejb.UserFacade;
+import javax.ejb.EJB;
+import javax.ejb.embeddable.EJBContainer;
+import model.User;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,12 +22,17 @@ import static org.junit.Assert.*;
  * @author yomac_000
  */
 public class UserControllerTest {
+    @EJB
+    private UserFacade userFacade;
+    private User user;
     
     public UserControllerTest() {
+   
+        
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() {       
     }
     
     @AfterClass
@@ -33,6 +41,14 @@ public class UserControllerTest {
     
     @Before
     public void setUp() {
+        long id = 1;
+        user = new User();
+        user.setId(id);
+        user.setName("JohnDoe");
+        userFacade = new UserFacade();
+        userFacade.setEnv(Environment.TEST);
+        
+        userFacade.create(user);
     }
     
     @After
@@ -40,61 +56,32 @@ public class UserControllerTest {
     }
 
     /**
-     * Test of processRequest method, of class UserController.
+     * Test of getHelloMsg method, of class UserController.
      */
-    @org.junit.Test
-    public void testProcessRequest() throws Exception {
-        System.out.println("processRequest");
-        HttpServletRequest request = null;
-        HttpServletResponse response = null;
-        UserController instance = new UserController();
-        instance.processRequest(request, response);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of doGet method, of class UserController.
-     */
-    @org.junit.Test
-    public void testDoGet() throws Exception {
-        System.out.println("doGet");
-        HttpServletRequest request = null;
-        HttpServletResponse response = null;
-        UserController instance = new UserController();
-        instance.doGet(request, response);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-        
-    }
-
-    /**
-     * Test of doPost method, of class UserController.
-     */
-    @org.junit.Test
-    public void testDoPost() throws Exception {
-//        System.out.println("doPost");
-//        HttpServletRequest request = null;
-//        HttpServletResponse response = null;
+    @Test
+    public void testGetHelloMsg() {
+//        System.out.println("getHelloMsg");
 //        UserController instance = new UserController();
-//        instance.doPost(request, response);
+//        String expResult = "";
+//        String result = instance.getHelloMsg();
+//        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-        assertEquals("good", "good");
     }
 
     /**
-     * Test of getServletInfo method, of class UserController.
+     * Test of register method, of class UserController.
      */
-    @org.junit.Test
-    public void testGetServletInfo() {
-        System.out.println("getServletInfo");
-        UserController instance = new UserController();
-        String expResult = "";
-        String result = instance.getServletInfo();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test
+    public void testRegister() {
+//        System.out.println("register");
+//        String message = "";
+//        UserController instance = new UserController();
+//        String expResult = "";
+//        String result = instance.register(message);
+//        assertEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
     }
     
 }

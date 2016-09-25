@@ -5,12 +5,14 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="dev"/>
     </properties>
   </persistence-unit>
   <persistence-unit name="snel-transport-test" transaction-type="JTA">
     <jta-data-source>java:app/snel-transport-test</jta-data-source>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="test"/>
     </properties>
   </persistence-unit>
 </persistence>

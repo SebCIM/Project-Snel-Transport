@@ -22,10 +22,29 @@ public class UserFacade extends AbstractFacade<User> {
 
     @PersistenceContext(unitName = "snel-transport-test")
     private EntityManager testEm;
+    
+    private Environment env;
 
     @Override
     protected EntityManager getEntityManager() {
-        return em;
+        if(getEnv() == null) {
+            return testEm;
+        }
+        switch (getEnv()) {
+            case DEV:
+                return em;
+            case TEST:
+                return testEm;
+            default:
+                return em;
+        }
+    }
+    
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
+    public Environment getEnv() {
+        return env;
     }
         
     @Override

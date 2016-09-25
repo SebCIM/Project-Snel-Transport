@@ -25,6 +25,9 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager(Environment env);
 
     public void create(T entity) {
+        System.out.println("qwe");
+        System.out.println(getEntityManager());
+        System.out.println("ENDqwe");
         getEntityManager().persist(entity);
     }
 
