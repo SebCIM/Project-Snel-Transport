@@ -9,7 +9,10 @@ import ejb.Environment;
 import ejb.UserFacade;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import model.User;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -29,6 +32,7 @@ public class UserControllerTest {
     
     public UserControllerTest() {
         userFacade = new UserFacade();
+        userFacade.setEnv(Environment.TEST);
         userFacade.emptyTable();
     }
     
@@ -42,11 +46,14 @@ public class UserControllerTest {
     
     @Before
     public void setUp() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport-test");
+        EntityManager em = emf.createEntityManager();
         user = new User();
         user.setName("JohnDoe");
-        userFacade = new UserFacade();
-        userFacade.setEnv(Environment.TEST);
-        userFacade.create(user);
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(user);
+        tx.commit();
     }
     
     @After
@@ -58,17 +65,12 @@ public class UserControllerTest {
      */
     @Test
     public void testGetHelloMsg() {
-//        System.out.println("getHelloMsg");
-//        UserController instance = new UserController();
-//        String expResult = "";
-//        String result = instance.getHelloMsg();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
         userFacade = new UserFacade();
-        userFacade.equals(this);
-        
-        
+        userFacade.setEnv(Environment.TEST);
+        List findWithName = userFacade.findWithName("JohnDoe");
+        User foundUser = new User();
+        foundUser = (User) findWithName.get(0);
+        assertEquals("JohnDoe", foundUser.getName());  
     }
 
     /**
@@ -76,14 +78,7 @@ public class UserControllerTest {
      */
     @Test
     public void testRegister() {
-//        System.out.println("register");
-//        String message = "";
-//        UserController instance = new UserController();
-//        String expResult = "";
-//        String result = instance.register(message);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+
     }
     
 }

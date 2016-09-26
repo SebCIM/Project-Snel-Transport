@@ -5,12 +5,14 @@
  */
 package ejb;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import model.User;
 
 /**
@@ -31,7 +33,7 @@ public class UserFacade extends AbstractFacade<User> {
     @Override
     protected EntityManager getEntityManager() {
         if(getEnv() == null) {
-            return testEm;
+            return em;
         }
         switch (getEnv()) {
             case DEV:
@@ -64,5 +66,12 @@ public class UserFacade extends AbstractFacade<User> {
 
     public UserFacade() {
         super(User.class);
+    }
+    
+    public List findWithName(String name) {
+        return getEntityManager().createQuery(
+            "SELECT u FROM User u WHERE u.name = :name ")
+            .setParameter("name", name)
+            .getResultList();
     }
 }

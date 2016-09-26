@@ -26,19 +26,8 @@ public abstract class AbstractFacade<T> {
     
     protected abstract EntityManager getEntityManager(Environment env);
 
-    public void create(T entity) {
-//        System.out.println("qwe");
-//        System.out.println(getEntityManager());
-//        System.out.println("ENDqwe");
-//        getEntityManager().persist(entity);
-        
-        System.out.println("qwe");
-        System.out.println(entity);
-        System.out.println("ENDqwe");
-        EntityTransaction tx = getEntityManager().getTransaction();
-        tx.begin();
+    public void create(T entity) {        
         getEntityManager().persist(entity);
-        tx.commit();
     }
 
     public void edit(T entity) {
@@ -82,23 +71,5 @@ public abstract class AbstractFacade<T> {
         Query q = getEntityManager().createNativeQuery("DELETE FROM public.\"User\" ");
         q.executeUpdate();
         tx.commit();
-    }
-    public T findByName(String name) {
-        EntityTransaction tx = getEntityManager().getTransaction();
-        tx.begin();
-//        Query q = getEntityManager().createNativeQuery("DELETE FROM public.\"User\" ");
-//        q.executeUpdate();
-        tx.commit();
-        
-        Query q = getEntityManager().createNativeQuery(
-        "SELECT * FROM " + entityClass.getName() + " e WHERE name = :name");
-	q.setParameter("name", name);
-	try {
-		return (Order) q.getSingleResult();
-	} catch (NoResultException exc) {
-		return null;
-	}
-        
-    }
-    
+    }    
 }
