@@ -7,6 +7,9 @@ package ejb;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import model.User;
 
@@ -20,8 +23,8 @@ public class UserFacade extends AbstractFacade<User> {
     @PersistenceContext(unitName = "snel-transport")
     private EntityManager em;
 
-    @PersistenceContext(unitName = "snel-transport-test")
-    private EntityManager testEm;
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport-test");
+    EntityManager testEm = emf.createEntityManager();
     
     private Environment env;
 

@@ -7,6 +7,7 @@ package controller;
 
 import ejb.Environment;
 import ejb.UserFacade;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.embeddable.EJBContainer;
 import model.User;
@@ -27,8 +28,8 @@ public class UserControllerTest {
     private User user;
     
     public UserControllerTest() {
-   
-        
+        userFacade = new UserFacade();
+        userFacade.emptyTable();
     }
     
     @BeforeClass
@@ -36,18 +37,15 @@ public class UserControllerTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() {   
     }
     
     @Before
     public void setUp() {
-        long id = 1;
         user = new User();
-        user.setId(id);
         user.setName("JohnDoe");
         userFacade = new UserFacade();
         userFacade.setEnv(Environment.TEST);
-        
         userFacade.create(user);
     }
     
@@ -67,6 +65,10 @@ public class UserControllerTest {
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
+        userFacade = new UserFacade();
+        userFacade.equals(this);
+        
+        
     }
 
     /**
