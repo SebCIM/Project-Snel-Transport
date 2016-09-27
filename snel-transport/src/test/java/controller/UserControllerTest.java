@@ -13,7 +13,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.ws.rs.core.Response;
 import model.User;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -65,12 +67,7 @@ public class UserControllerTest {
      */
     @Test
     public void testGetHelloMsg() {
-        userFacade = new UserFacade();
-        userFacade.setEnv(Environment.TEST);
-        List findWithName = userFacade.findWithName("JohnDoe");
-        User foundUser = new User();
-        foundUser = (User) findWithName.get(0);
-        assertEquals("JohnDoe", foundUser.getName());  
+
     }
 
     /**
@@ -78,7 +75,21 @@ public class UserControllerTest {
      */
     @Test
     public void testRegister() {
-
+               
+        String message = "{'name' : 'Peter'}";
+        UserController instance = new UserController();
+        JSONObject expResult = new JSONObject();
+        expResult.put("message", "Your account has been created.");
+        Response result = instance.register(message, "TEST");
+        
+        assertEquals(expResult.toString(), result.getEntity().toString());
+        
+        userFacade = new UserFacade();
+        userFacade.setEnv(Environment.TEST);
+        List findWithName = userFacade.findWithName("Peter");
+        User foundUser = new User();
+        foundUser = (User) findWithName.get(0);
+        assertEquals("Peter", foundUser.getName());  
     }
     
 }

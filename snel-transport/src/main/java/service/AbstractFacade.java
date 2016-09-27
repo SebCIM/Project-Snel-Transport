@@ -3,15 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb;
+package service;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
-import model.User;
 
 /**
  *
@@ -26,19 +21,9 @@ public abstract class AbstractFacade<T> {
     }
 
     protected abstract EntityManager getEntityManager();
-    
-    protected abstract EntityManager getEntityManager(Environment env);
 
-    public void create(T entity) {    
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport-test");
-        EntityManager em = emf.createEntityManager();
-      
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        em.persist(entity);
-        tx.commit();
-        
-//        getEntityManager().persist(entity);
+    public void create(T entity) {
+        getEntityManager().persist(entity);
     }
 
     public void edit(T entity) {
@@ -76,11 +61,4 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
     
-    public void emptyTable() {
-        EntityTransaction tx = getEntityManager().getTransaction();
-        tx.begin();
-        Query q = getEntityManager().createNativeQuery("DELETE FROM public.\"User\" ");
-        q.executeUpdate();
-        tx.commit();
-    }    
 }
