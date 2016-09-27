@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.ws.rs.core.Response;
 import model.User;
 import org.json.JSONObject;
 import org.junit.After;
@@ -75,14 +74,13 @@ public class UserControllerTest {
      */
     @Test
     public void testRegister() {
-               
-        String message = "{'name' : 'Peter'}";
+        String data = "{'name' : 'Peter', 'environment' : 'TEST'}";
         UserController instance = new UserController();
         JSONObject expResult = new JSONObject();
         expResult.put("message", "Your account has been created.");
-        Response result = instance.register(message, "TEST");
+        JSONObject result = instance.register(data);
         
-        assertEquals(expResult.toString(), result.getEntity().toString());
+        assertEquals(expResult.toString(), result.toString());
         
         userFacade = new UserFacade();
         userFacade.setEnv(Environment.TEST);

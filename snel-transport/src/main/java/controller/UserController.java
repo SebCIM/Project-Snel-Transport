@@ -9,11 +9,10 @@ import ejb.Environment;
 import ejb.UserFacade;
 import javax.ejb.EJB;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -48,25 +47,24 @@ public class UserController extends Application {
     @POST
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(@PathParam("message")String message, @PathParam("test") String envString) {
-        System.out.println(message +" "+envString);
-//        JSONObject request = new JSONObject(message);
+    @Consumes({"application/json"})
+    public JSONObject register(String data) {
+        JSONObject request = new JSONObject(data);
         JSONObject obj = new JSONObject();
-//        obj.put("message", "Your account has been created.");
-//        
-////        System.out.println("nam2e "+request.getString("name"));
-////        System.out.println("obj " + envString);
-//        
-//        // Register user
-//        User user = new User();
-//        user.setName(request.getString("name"));
-//        userFacade = new UserFacade();
-//        if(envString == "TEST"){
-//            userFacade.setEnv(Environment.TEST);
-//        }
-//        userFacade.create(user);
-        
-        return Response.ok(obj, MediaType.APPLICATION_JSON).build();
-    }
+        obj.put("message", "Your account has been created.");
 
+        // Register user
+        User user = new User();
+        user.setName(request.getString("name"));
+        userFacade = new UserFacade();
+        
+        if(request.has("environment")) {
+            if(request.getString("environment") == "TEST"){
+                userFacade.setEnv(Environment.TEST);
+            }
+        }
+        userFacade.create(user);
+        
+        return obj;
+    }
 }
