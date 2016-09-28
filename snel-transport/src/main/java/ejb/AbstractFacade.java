@@ -30,15 +30,15 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager(Environment env);
 
     public void create(T entity) {    
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport-test");
-        EntityManager em = emf.createEntityManager();
-      
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        em.persist(entity);
-        tx.commit();
-        
-//        getEntityManager().persist(entity);
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport");
+//        EntityManager em = emf.createEntityManager();
+//      
+//        EntityTransaction tx = em.getTransaction();
+//        tx.begin();
+//        em.persist(entity);
+//        tx.commit();
+        System.out.println("entity " +entity);
+        getEntityManager().persist(entity);
     }
 
     public void edit(T entity) {

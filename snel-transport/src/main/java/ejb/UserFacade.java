@@ -33,14 +33,18 @@ public class UserFacade extends AbstractFacade<User> {
     @Override
     protected EntityManager getEntityManager() {
         if(getEnv() == null) {
+            System.out.println("getenv is null ");
             return em;
         }
         switch (getEnv()) {
             case DEV:
+                System.out.println("dev environtmen ");
                 return em;
             case TEST:
+                System.out.println("test environtmen ");
                 return testEm;
             default:
+                System.out.println("default ");
                 return em;
         }
     }

@@ -55,9 +55,11 @@ public class UserController extends Application {
 
         // Register user
         User user = new User();
+       
         user.setName(request.getString("name"));
-        userFacade = new UserFacade();
-        
+//        userFacade = new UserFacade();
+        System.out.println("user ctrl "+ user);
+        System.out.println("userfacade ctrl "+ userFacade);
         if(request.has("environment")) {
             if(request.getString("environment") == "TEST"){
                 userFacade.setEnv(Environment.TEST);
