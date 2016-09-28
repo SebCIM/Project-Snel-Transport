@@ -5,12 +5,13 @@
  */
 package controller;
 
-import ejb.UserFacade;
-import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
@@ -25,9 +26,6 @@ import model.User;
 @ApplicationPath("/api")
 @Path("/auth")
 public class UserController extends Application {
-
-    @EJB
-    private UserFacade userFacade;
 
     @GET
     @Path("/user")
@@ -48,8 +46,18 @@ public class UserController extends Application {
     public String register(String message) {
         // Register user
         User user = new User();
-        user.setName("timmy");
-        userFacade.create(user);
+        user.setName("ernst");
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport");
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(user);
+        tx.commit();
+        em.close();
+        emf.close();
+
         return "registered user";
     }
 
