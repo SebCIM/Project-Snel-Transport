@@ -16,8 +16,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import model.User;
+import org.json.JSONObject;
 
 /**
  *
@@ -43,12 +45,23 @@ public class UserController extends Application {
     @POST
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
-    public String register(String message) {
+    public String register(String data) {
+        JSONObject request = new JSONObject(data);
+        JSONObject obj = new JSONObject();
+        obj.put("message", "Your account has been created.");
+        
         // Register user
         User user = new User();
-        user.setName("ernst");
+        user.setName(request.getString("name"));
+        String dbName = "snel-transport";
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport");
+        if(request.has("environment")) {
+            if(request.getString("environment").equals("TEST") ){
+                dbName = "snel-transport-test";
+            }
+        }
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(dbName);
         EntityManager em = emf.createEntityManager();
         
         EntityTransaction tx = em.getTransaction();
@@ -58,7 +71,8 @@ public class UserController extends Application {
         em.close();
         emf.close();
 
-        return "registered user";
+//        return Response.status(Response.Status.CREATED).entity("Your account has been created").build();
+        return "Your account has been created.";
     }
 
 }
