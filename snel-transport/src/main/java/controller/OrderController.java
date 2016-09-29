@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.io.StringReader;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,11 +29,10 @@ import javax.json.*;
  * @author Z.Huraibi
  */
 @ApplicationPath("/api")
-@Path("/auth")
-public class UserController extends Application {
+@Path("/orders")
+public class OrderController extends Application {
 
     @GET
-    @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     public String getHelloMsg(){
         
@@ -49,9 +49,15 @@ public class UserController extends Application {
      * @return 
      */
     @POST
-    @Path("/register")
+    @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(String data) {
+    public Response addOrder(String data) {
+        JsonReader reader = Json.createReader(new StringReader(data));
+        JsonObject orderObject = reader.readObject();
+        reader.close();
+        
+        System.out.println("orderObject "+ orderObject.getString("name"));
+        System.out.println("qwe "+ orderObject.getInt("status"));
 //        JSONObject request = new JSONObject(data);
 //        JSONObject obj = new JSONObject();
         
