@@ -20,6 +20,7 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>    
         <class>model.User</class>    
         <class>model.Order</class>    
+        <class>model.OrderLine</class>    
         <properties>      
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>      
             <property name="eclipselink.canonicalmodel.subpackage" value="test"/>

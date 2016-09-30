@@ -5,9 +5,11 @@
  */
 package controller;
 
+import java.io.StringReader;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -71,22 +73,32 @@ public class OrderControllerTest {
     public void testAddOrder() {
         JsonObject obj = Json.createObjectBuilder().
                 add("name", "Keyboard").
+                add("customerId", 1).
+                add("status", 1).
                 add("price", "12.99").
                 add("environment", "TEST").
                 build();
         OrderController instance = new OrderController();
-        String expResult = "{\"message\":\"Your order has been created.\"}";
+        String expResult = "{\"message\":\"Your order has been created.\","
+                + "\"id\":2,"
+                + "\"name\":\"Keyboard\""
+                + "}";
       
         Response result = instance.addOrder(obj);
+        
+        JsonReader jsonReader = Json.createReader(new StringReader(result.getEntity().toString()));
+        JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+
         EntityManager em = emf.createEntityManager();
         
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         
-        String name = obj.getString("name");
+        int id = object.getInt("id");
         List findWithName = em.createQuery(
-            "SELECT u FROM Order u WHERE u.name = :name ")
-            .setParameter("name", name)
+            "SELECT u FROM Order u WHERE u.id = :id ")
+            .setParameter("id", id)
             .getResultList();
         tx.commit();
         em.close();

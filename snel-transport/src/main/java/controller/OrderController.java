@@ -5,7 +5,6 @@
  */
 package controller;
 
-import java.io.StringReader;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,8 +19,6 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import model.User;
-//import org.json.JSONObject;
 import javax.json.*;
 import model.Order;
 
@@ -49,14 +46,12 @@ public class OrderController extends Application {
     @POST
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addOrder(JsonObject data) {   
-        
+    public Response addOrder(JsonObject data) {
         Order order = new Order();
         order.setName(data.getString("name"));
         long customerId = data.getInt("customerId");
         order.setCustomerId(customerId);
         Double price = new Double(data.getString("price"));
-        System.out.println(price);
         order.setPrice(price);
         Date orderDate = new Date();
         order.setOrderDate(orderDate);
@@ -75,12 +70,14 @@ public class OrderController extends Application {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         em.persist(order);
+        em.flush();
         tx.commit();
         em.close();
         emf.close();
         
         JsonObject obj = Json.createObjectBuilder().
                 add("message", "Your order has been created.").
+                add("id", order.getId()).
                 add("name", data.getString("name")).
                 build();
        
