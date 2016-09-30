@@ -11,12 +11,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author Z.Huraibi
  */
 @Entity
+@Table(name="\"Order\"")
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,7 +29,9 @@ public class Order implements Serializable {
     private Long id;
     private String name;
     private Double price;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date deliveryDate;
     private Long customerId;
     private Integer status;

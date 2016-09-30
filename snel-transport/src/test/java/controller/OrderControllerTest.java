@@ -12,8 +12,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.ws.rs.core.Response;
-import model.User;
+import model.Order;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,11 +26,17 @@ import static org.junit.Assert.*;
  *
  * @author Z.Huraibi
  */
-public class UserControllerTest {
-    private User user;
+public class OrderControllerTest {
+    private Order order;
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport-test");
     
-    public UserControllerTest() {
+    public OrderControllerTest() {        
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        Query q = em.createNativeQuery("DELETE FROM public.\"Order\" ");
+        q.executeUpdate();
+        tx.commit();
     }
     
     @BeforeClass
@@ -42,13 +49,13 @@ public class UserControllerTest {
     
     @Before
     public void setUp() {
-      
         EntityManager em = emf.createEntityManager();
-        user = new User();
-        user.setName("JohnDoe");
+        order = new Order();
+        order.setName("Fietsbel");
+        order.setPrice(24.99);
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        em.persist(user);
+        em.persist(order);
         tx.commit();
     }
     
@@ -56,47 +63,39 @@ public class UserControllerTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of getHelloMsg method, of class UserController.
-     */
-    @Test
-    public void testGetHelloMsg() {
-
-    }
 
     /**
-     * Test of register method, of class UserController.
+     * Test of addOrder method, of class OrderController.
      */
     @Test
-    public void testRegister() {
-        
-        JsonObject obj = Json.createObjectBuilder().add("name", "Peter")
-                .add("environment", "TEST")
-                .build();
-        UserController instance = new UserController();
-        String expResult = "{\"message\":\"Your account has been created.\"}";
+    public void testAddOrder() {
+        JsonObject obj = Json.createObjectBuilder().
+                add("name", "Keyboard").
+                add("price", "12.99").
+                add("environment", "TEST").
+                build();
+        OrderController instance = new OrderController();
+        String expResult = "{\"message\":\"Your order has been created.\"}";
       
-        Response result = instance.register(obj);
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("snel-transport-test");
+        Response result = instance.addOrder(obj);
         EntityManager em = emf.createEntityManager();
         
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         
-        String name = "Peter";
+        String name = obj.getString("name");
         List findWithName = em.createQuery(
-            "SELECT u FROM User u WHERE u.name = :name ")
+            "SELECT u FROM Order u WHERE u.name = :name ")
             .setParameter("name", name)
             .getResultList();
         tx.commit();
         em.close();
         emf.close();
 
-        User foundUser = new User();
-        foundUser = (User) findWithName.get(0);
-        assertEquals("Peter", foundUser.getName());  
+        Order foundOrder = new Order();
+        foundOrder = (Order) findWithName.get(0);
+        assertEquals("Keyboard", foundOrder.getName());  
         assertEquals(expResult, result.getEntity().toString());
-       
     }
     
 }

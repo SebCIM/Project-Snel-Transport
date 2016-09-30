@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.io.StringReader;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,6 +23,8 @@ import javax.ws.rs.core.Response;
 import model.User;
 //import org.json.JSONObject;
 import javax.json.*;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
 /**
  *
@@ -30,7 +33,7 @@ import javax.json.*;
 @ApplicationPath("/api")
 @Path("/auth")
 public class UserController extends Application {
-
+    
     @GET
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,37 +54,34 @@ public class UserController extends Application {
     @POST
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(String data) {
-//        JSONObject request = new JSONObject(data);
-//        JSONObject obj = new JSONObject();
-        
-        
-//        obj.put("message", "Your account has been created.");
+    public Response register(JsonObject data) {
 
-//        System.out.println("json obj " + obj);
+        System.out.println("json obj " + data);
         
         // Register user
-//        User user = new User();
-//        user.setName(request.getString("name"));
-//        String dbName = "snel-transport";
-//        
-//        if(request.has("environment")) {
-//            if(request.getString("environment").equals("TEST") ){
-//                dbName = "snel-transport-test";
-//            }
-//        }
+        User user = new User();
+        user.setName(data.getString("name"));
+        String dbName = "snel-transport";
         
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory(dbName);
-//        EntityManager em = emf.createEntityManager();
-//        
-//        EntityTransaction tx = em.getTransaction();
-//        tx.begin();
-//        em.persist(user);
-//        tx.commit();
-//        em.close();
-//        emf.close();
+        if(data.containsKey("environment")) {
+            System.out.println("yes1");
+            if(data.getString("environment").equals("TEST") ){
+                System.out.println("yes1");
+                dbName = "snel-transport-test";
+            }
+        }
         
-         JsonObject obj = Json.createObjectBuilder().add("name", "hans").build();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(dbName);
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(user);
+        tx.commit();
+        em.close();
+        emf.close();
+        
+         JsonObject obj = Json.createObjectBuilder().add("message", "Your account has been created.").build();
        
         return Response.status(Response.Status.CREATED).entity(obj).build();
 //        return "Your account has been created.";

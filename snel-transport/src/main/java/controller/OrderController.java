@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import model.User;
 //import org.json.JSONObject;
 import javax.json.*;
+import model.Order;
 
 /**
  *
@@ -39,10 +40,7 @@ public class OrderController extends Application {
         return "test";
     }
 
-    public JsonObject user(String name){
-        
-        return Json.createObjectBuilder().add("name", name).build();
-    }
+
     /**
      *
      * @param message
@@ -51,46 +49,30 @@ public class OrderController extends Application {
     @POST
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addOrder(String data) {
-        JsonReader reader = Json.createReader(new StringReader(data));
-        JsonObject orderObject = reader.readObject();
-        reader.close();
+    public Response addOrder(JsonObject data) {
         
-        System.out.println("orderObject "+ orderObject.getString("name"));
-        System.out.println("qwe "+ orderObject.getInt("status"));
-//        JSONObject request = new JSONObject(data);
-//        JSONObject obj = new JSONObject();
+        Order order = new Order();
+        order.setName(data.getString("name"));
+        String dbName = "snel-transport";
         
+        if(data.containsKey("environment")) {
+            if(data.getString("environment").equals("TEST") ){
+                dbName = "snel-transport-test";
+            }
+        }
         
-//        obj.put("message", "Your account has been created.");
-
-//        System.out.println("json obj " + obj);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(dbName);
+        EntityManager em = emf.createEntityManager();
         
-        // Register user
-//        User user = new User();
-//        user.setName(request.getString("name"));
-//        String dbName = "snel-transport";
-//        
-//        if(request.has("environment")) {
-//            if(request.getString("environment").equals("TEST") ){
-//                dbName = "snel-transport-test";
-//            }
-//        }
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(order);
+        tx.commit();
+        em.close();
+        emf.close();
         
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory(dbName);
-//        EntityManager em = emf.createEntityManager();
-//        
-//        EntityTransaction tx = em.getTransaction();
-//        tx.begin();
-//        em.persist(user);
-//        tx.commit();
-//        em.close();
-//        emf.close();
-        
-         JsonObject obj = Json.createObjectBuilder().add("name", "hans").build();
+         JsonObject obj = Json.createObjectBuilder().add("message", "Your order has been created.").build();
        
         return Response.status(Response.Status.CREATED).entity(obj).build();
-//        return "Your account has been created.";
     }
-
 }
